@@ -22,6 +22,7 @@ const Footer: React.FC = () => {
   const quickLinks = [
     { name: 'About Us', href: '/' },
     { name: 'DMOR Technology', href: '/' },
+    { name: 'Expert Blog', href: '/blogs' },
     { name: 'Case Studies', href: '/news' },
     { name: 'Support Center', href: '/contact' },
     { name: 'Product Catalog', href: 'https://saherflow.com/wp-content/uploads/2025/01/Saher-Products-Broucher-2025-01.pdf', external: true },
@@ -39,6 +40,7 @@ const Footer: React.FC = () => {
 
   const resources = [
     { name: 'Product Brochures', href: '/products' },
+    { name: 'Technology Blog', href: '/blogs' },
     { name: 'Technical Papers', href: '/news' },
     { name: 'Webinars & Events', href: '/news' },
     { name: 'Industry Insights', href: '/news' },

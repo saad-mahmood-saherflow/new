@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Products from './pages/Products';
 import Services from './pages/Services';
 import News from './pages/News';
+import Blogs from './pages/Blogs';
 import Careers from './pages/Careers';
 
 import Contact from './components/Contact';
@@ -36,6 +37,7 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/services" element={<Services />} />
               <Route path="/news" element={<News />} />
+              <Route path="/blogs" element={<Blogs />} />
               <Route path="/careers" element={<Careers />} />
            
     

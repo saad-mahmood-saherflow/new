@@ -349,7 +349,7 @@ const Careers: React.FC = () => {
       </div>
 
       {/* Additional Benefits Section for Saudi Context */}
-      <div className="py-16 bg-gradient-to-r from-navy-900 to-navy-800 dark:from-gray-800 dark:to-gray-700 text-white">
+      <div className="py-16 bg-gradient-to-r from-navy-900 to-navy-800 dark:from-gray-800 dark:to-gray-700 text-white mb-0">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Working in Saudi Arabia</h2>

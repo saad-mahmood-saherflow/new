@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Send, Clock, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { EmailService } from '../utils/emailService';
 import SEOHead from './SEOHead';
+import { useNotifications } from './NotificationSystem';
 
 const Contact: React.FC = () => {
+  const { addNotification } = useNotifications();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -63,44 +63,56 @@ const Contact: React.FC = () => {
     e.preventDefault();
     
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      setErrorMessage('Please fill in all required fields');
-      setSubmitStatus('error');
+      addNotification({
+        type: 'error',
+        title: 'Missing Information',
+        message: 'Please fill in all required fields before submitting your message.',
+        duration: 5000
+      });
       return;
     }
 
     setIsSubmitting(true);
-    setSubmitStatus('idle');
-    setErrorMessage('');
 
     try {
       const result = await EmailService.sendContactForm(formData);
       
       if (result.success) {
-        setSubmitStatus('success');
+        addNotification({
+          type: 'success',
+          title: 'Message Sent Successfully!',
+          message: 'Thank you for contacting us. We\'ll get back to you within 24 hours.',
+          duration: 6000
+        });
         setFormData({ name: '', email: '', department: '', message: '', phone: '' });
       } else {
-        setSubmitStatus('error');
-        setErrorMessage(result.error || 'Failed to send message. Please try again.');
+        addNotification({
+          type: 'error',
+          title: 'Message Failed to Send',
+          message: result.error || 'There was an error sending your message. Please try again or contact us directly.',
+          duration: 8000,
+          action: {
+            label: 'Email Directly',
+            onClick: () => window.open('mailto:contact@saherflow.com?subject=Contact Form Inquiry')
+          }
+        });
       }
     } catch (error) {
       console.error('Contact form error:', error);
-      setSubmitStatus('error');
-      setErrorMessage('Failed to send message. Please try again.');
+      addNotification({
+        type: 'error',
+        title: 'Connection Error',
+        message: 'Unable to send message due to connection issues. Please try again or email us directly.',
+        duration: 8000,
+        action: {
+          label: 'Email Directly',
+          onClick: () => window.open('mailto:contact@saherflow.com?subject=Contact Form Inquiry')
+        }
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  // Reset status after 5 seconds
-  React.useEffect(() => {
-    if (submitStatus !== 'idle') {
-      const timer = setTimeout(() => {
-        setSubmitStatus('idle');
-        setErrorMessage('');
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [submitStatus]);
 
   return (
     <>
@@ -321,22 +333,6 @@ const Contact: React.FC = () => {
                   <Send size={20} />
                   {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
-                
-                {submitStatus === 'success' && (
-                  <div className="bg-green-100 dark:bg-green-900/30 border border-green-500/30 rounded-lg p-4 text-center">
-                    <p className="text-green-800 dark:text-green-400 font-medium">
-                      ✅ Message sent successfully! We'll get back to you within 24 hours.
-                    </p>
-                  </div>
-                )}
-                
-                {submitStatus === 'error' && (
-                  <div className="bg-red-100 dark:bg-red-900/30 border border-red-500/30 rounded-lg p-4 text-center">
-                    <p className="text-red-800 dark:text-red-400 font-medium">
-                      ❌ {errorMessage || 'There was an error sending your message. Please try again.'}
-                    </p>
-                  </div>
-                )}
               </form>
             </div>
 
